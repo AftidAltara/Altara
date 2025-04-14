@@ -267,18 +267,6 @@
     .portfolio-content .tags { margin-bottom: 20px; }
     .portfolio-content .tag { display: inline-block; background-color: rgba(76, 201, 240, 0.15); color: var(--primary-color); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 8px; margin-bottom: 8px; font-weight: 500; }
 
-    /* --- Testimonials Section --- */
-    #testimonials {} /* Uses body bg */
-    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-    .testimonial-card { background-color: var(--card-background); padding: 35px; border-radius: var(--border-radius-large); box-shadow: var(--shadow); position: relative; border-left: 5px solid var(--primary-color); transition: transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth); }
-    .testimonial-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
-    .testimonial-card .quote-icon { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; color: rgba(76, 201, 240, 0.2); opacity: 0.5; }
-    .testimonial-text { font-size: 1.05rem; font-style: italic; color: var(--secondary-color); margin-bottom: 25px; line-height: 1.8; position: relative; z-index: 1; }
-    .testimonial-author { display: flex; align-items: center; }
-    .testimonial-author img { width: 55px; height: 55px; border-radius: 50%; margin-right: 15px; object-fit: cover; border: 2px solid var(--primary-color); }
-    .testimonial-author-info h5 { font-size: 1.1rem; font-weight: 600; color: var(--text-color-light); margin-bottom: 3px; }
-    .testimonial-author-info span { font-size: 0.9rem; color: var(--primary-color); font-weight: 500; }
-
     /* --- Contact Section (Replaced with Calendly Link) --- */
     #contact {} /* Uses body bg */
     /* Styling for the new content */
@@ -379,7 +367,6 @@
                 <li class="nav-item"><a href="#services" class="nav-link">Features</a></li>
                 <li class="nav-item"><a href="#objection-handling" class="nav-link">Why Altara?</a></li>
                 <li class="nav-item"><a href="#portfolio" class="nav-link">Case Studies</a></li>
-                <li class="nav-item"><a href="#testimonials" class="nav-link">Testimonials</a></li>
                 <li class="nav-item"><a href="#contact" class="nav-link">Book a Demo</a></li> <!-- Updated link text -->
             </ul>
             <!-- Mobile Menu Toggle Button -->
@@ -498,43 +485,7 @@
             </div>
         </section>
 
-        <!-- =========== TESTIMONIALS SECTION =========== -->
-        <section class="section" id="testimonials">
-            <div class="container">
-                 <h2 class="section-title animate-on-scroll fade-in">Hear From Businesses Like Yours</h2>
-                 <div class="testimonials-grid">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 1;">
-                         <i class="fas fa-quote-right quote-icon"></i>
-                         <p class="testimonial-text">"Altara's system is genius. We were definitely losing leads overnight. Now, I wake up to booked appointments. Game changer for our HVAC business."</p>
-                         <div class="testimonial-author">
-                             <img src="https://via.placeholder.com/80x80/4cc9f0/ffffff?text=S.M." alt=" HVAC Business Owner">
-                             <div class="testimonial-author-info"><h5>Sarah Miller</h5><span>Owner, Comfort Zone Heating & Cooling</span></div>
-                         </div>
-                    </div>
-                     <!-- Testimonial 2 -->
-                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 2;">
-                         <i class="fas fa-quote-right quote-icon"></i>
-                         <p class="testimonial-text">"The automatic follow-up on missed calls alone paid for the service in the first month. Our dispatcher can focus on complex calls now, not just chasing people down."</p>
-                         <div class="testimonial-author">
-                             <img src="https://via.placeholder.com/80x80/4361ee/ffffff?text=D.R." alt="Plumbing Operations Manager">
-                             <div class="testimonial-author-info"><h5>David Rodriguez</h5><span>Operations Manager, Precision Plumbing Pros</span></div>
-                         </div>
-                    </div>
-                     <!-- Testimonial 3 -->
-                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 3;">
-                         <i class="fas fa-quote-right quote-icon"></i>
-                         <p class="testimonial-text">"Seamless integration with ServiceTitan. The setup was quick, and the ROI dashboard makes it easy to see the value Altara brings every single day."</p>
-                         <div class="testimonial-author">
-                             <img src="https://via.placeholder.com/80x80/86909c/ffffff?text=M.C." alt="Electrical Service Company CEO">
-                             <div class="testimonial-author-info"><h5>Mark Chen</h5><span>CEO, Current Electrical Solutions</span></div>
-                         </div>
-                    </div>
-                     <!-- EDIT HERE: Add more testimonials -->
-                 </div>
-            </div>
-        </section>
-
+       
         <!-- =========== CONTACT SECTION (Calendly Link) =========== -->
         <section class="section surface-bg" id="contact"> <!-- Added surface-bg -->
             <div class="container">
