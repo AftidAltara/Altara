@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altara - AI-Powered Lead Capture & Booking Automation</title>
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://media.discordapp.net/attachments/1290461382457692210/1361461146145525912/altara-high-resolution-logo_1-11.png?ex=67fed6ff&is=67fd857f&hm=ef8d67009fe54769030ab72af91cc1b679fbe13e6243cef356a703a695231899&=&width=1341&height=1006" type="image/png">
+
+    <!-- Google Fonts (Poppins & Lato) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ========================================================================= -->
+<!-- ============================ CSS START ================================== -->
+<!-- ========================================================================= -->
+<style>
+    /* --- CSS Reset & Base Styles --- */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* --- Theme Variables (Dark Theme with Cyan Accent) --- */
+    :root {
+        /* Core Colors */
+        --primary-color: #4cc9f0; /* Vibrant Cyan/Blue */
+        --secondary-color: #86909c; /* Medium Grey for secondary text/borders */
+        --background-color: #161a21; /* Very Dark Blue/Grey */
+        --surface-color: #21252f; /* Slightly Lighter Dark for Cards/Surfaces */
+        --text-color-light: #e9ecef; /* Light Grey/Off-White Text */
+        --text-color-dark: #343a40;
+        --accent-gradient: linear-gradient(135deg, #4361ee, #4cc9f0);
+
+        /* UI Elements */
+        --card-background: var(--surface-color);
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        --glow-primary: 0 0 15px rgba(76, 201, 240, 0.3);
+        --border-radius: 12px;
+        --border-radius-large: 20px;
+
+        /* Typography */
+        --font-primary: 'Poppins', sans-serif;
+        --font-secondary: 'Lato', sans-serif;
+
+        /* Animation */
+        --transition-speed-fast: 0.2s;
+        --transition-speed-medium: 0.4s;
+        --transition-speed-slow: 0.6s;
+        --easing-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+    }
+
+    body {
+        font-family: var(--font-primary);
+        color: var(--text-color-light);
+        background-color: var(--background-color); /* Fallback color */
+        /* Background Image Re-added */
+        background-image:
+            linear-gradient(rgba(22, 26, 33, 0.95), rgba(22, 26, 33, 0.98)), /* Dark Overlay */
+            url('https://media.discordapp.net/attachments/1290461382457692210/1361458072173936801/360_F_136835072_ab4biKbzegmUpWhc8LMGMobErrunomsF.png?ex=67fed423&is=67fd82a3&hm=a5083d65d4cf69849b9653b0cb5024b43bfd3b9f84427194f6fbc72b3dbb5e44&=');
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed; /* Parallax effect */
+        line-height: 1.7;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: relative; /* Needed for pseudo-element positioning */
+        z-index: 0;
+    }
+
+    /* Subtle Background Glow */
+    body::before {
+        content: '';
+        position: fixed; /* Fixed to viewport */
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120%; /* Wide gradient */
+        height: 80%; /* Covers upper part of viewport */
+        background: radial-gradient(ellipse at top center, rgba(76, 201, 240, 0.08) 0%, transparent 60%); /* Subtle primary glow from top */
+        z-index: -1; /* Behind all content */
+        pointer-events: none; /* Allows clicking through */
+        opacity: 0.8; /* Control intensity */
+    }
+
+    /* --- Utility Classes --- */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 25px;
+    }
+
+    .section {
+        padding: 100px 0;
+        overflow: hidden;
+        position: relative;
+        z-index: 1; /* Ensure sections are above body::before */
+    }
+    /* Alternate section background (applied where content might blend too much) */
+     .section.surface-bg {
+        background-color: var(--surface-color);
+        border-radius: var(--border-radius); /* Optionally round corners */
+        margin: 0 15px; /* Prevent touching edges */
+        padding: 100px 25px; /* Adjust padding inside */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Subtle separation */
+        /* Apply selectively in HTML: <section class="section surface-bg"> */
+     }
+
+     /* Remove original alternating background rule */
+    /* .section:nth-of-type(odd) { background-color: var(--surface-color); } */
+
+
+    .section-title {
+        text-align: center;
+        font-size: 2.8rem;
+        margin-bottom: 60px;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 20px;
+        color: var(--text-color-light);
+    }
+
+    .section-title::after {
+        content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+        width: 90px; height: 5px; background: var(--primary-color); border-radius: 5px; box-shadow: var(--glow-primary);
+    }
+
+    .btn {
+        display: inline-block; padding: 14px 30px; background: var(--primary-color); color: var(--background-color);
+        border: none; border-radius: var(--border-radius); text-decoration: none; font-weight: 600; font-size: 1rem;
+        transition: background-color var(--transition-speed-medium) var(--easing-smooth), transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth);
+        cursor: pointer; box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3);
+    }
+
+    .btn:hover { background-color: #38b8d9; transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 15px rgba(76, 201, 240, 0.4); }
+
+    .btn-secondary { background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); box-shadow: none; }
+    .btn-secondary:hover { background: var(--primary-color); color: var(--background-color); transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 15px rgba(76, 201, 240, 0.3); }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* --- Header & Navigation --- */
+    .header {
+        background-color: rgba(22, 26, 33, 0.85); backdrop-filter: blur(10px);
+        padding: 12px 0; /* Adjusted padding for larger logo */
+        position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        transition: background-color var(--transition-speed-medium) ease, padding var(--transition-speed-medium) ease;
+    }
+
+    .header.scrolled { padding: 8px 0; background-color: rgba(22, 26, 33, 0.95); } /* Slightly less padding when scrolled */
+
+    .navbar { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo-img {
+        max-height: 20px; /* INCREASED LOGO SIZE */
+		transform: scale(9.5);
+		transform-origin: top-middle;
+        width: auto;	
+        transition: max-height var(--transition-speed-medium) ease; /* Smooth size change */
+    }
+    .header.scrolled .nav-logo-img { max-height: 50px; } /* Slightly smaller logo when scrolled */
+
+    .nav-menu { list-style: none; display: flex; align-items: center; }
+    .nav-item { margin-left: 35px; }
+    .nav-link { color: var(--text-color-light); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color var(--transition-speed-medium) var(--easing-smooth); position: relative; padding: 5px 0; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 3px; background-color: var(--primary-color); border-radius: 3px; transition: width var(--transition-speed-medium) var(--easing-smooth); box-shadow: var(--glow-primary); }
+    .nav-link:hover, .nav-link.active { color: var(--primary-color); }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    .nav-toggler { display: none; font-size: 1.8rem; color: var(--text-color-light); cursor: pointer; background: none; border: none; padding: 5px; transition: color var(--transition-speed-medium) ease; }
+    .nav-toggler:hover { color: var(--primary-color); }
+
+    /* --- Hero Section --- */
+    .hero {
+        min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;
+        /* background removed - uses body background */
+        color: var(--text-color-light); position: relative; overflow: hidden; padding-top: 100px; /* Adjusted padding top for larger header */
+    }
+
+    /* Hero background grid (removed - rely on body background and glow) */
+    /* .hero::before { ... } */
+
+    .hero-content { position: relative; z-index: 1; max-width: 850px; }
+    .hero h1 { font-size: clamp(2.8rem, 6vw, 4rem); font-weight: 700; margin-bottom: 25px; line-height: 1.2; color: var(--text-color-light); opacity: 0; transform: translateY(30px); animation: fadeInUp 1s var(--easing-smooth) forwards; animation-delay: 0.3s; }
+    .hero h1 span { color: var(--primary-color); }
+    .hero p { font-size: clamp(1.1rem, 2.5vw, 1.3rem); margin-bottom: 40px; font-weight: 300; color: var(--secondary-color); max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s var(--easing-smooth) forwards; animation-delay: 0.6s; }
+    .hero .btn { opacity: 0; transform: translateY(30px); animation: fadeInUp 1s var(--easing-smooth) forwards; animation-delay: 0.9s; margin: 10px; }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* --- General Scroll Animation Setup --- */
+    .animate-on-scroll { opacity: 0; transition: opacity var(--transition-speed-slow) var(--easing-smooth), transform var(--transition-speed-slow) var(--easing-smooth); }
+    .animate-on-scroll.fade-in { transform: translateY(20px); }
+    .animate-on-scroll.fade-in-left { transform: translateX(-30px); }
+    .animate-on-scroll.fade-in-right { transform: translateX(30px); }
+    .animate-on-scroll.zoom-in { transform: scale(0.95); }
+    .animate-on-scroll.is-visible { opacity: 1; transform: translate(0, 0) scale(1); }
+    .stagger-delay { transition-delay: calc(0.15s * var(--animation-order, 0)); }
+
+    /* --- About Section --- */
+    #about {} /* Uses body bg */
+    .about-content { display: flex; gap: 60px; align-items: center; }
+    .about-text { flex: 1.2; }
+    .about-text h3 { font-size: 2rem; margin-bottom: 25px; color: var(--primary-color); font-weight: 600; }
+    .about-text p { margin-bottom: 20px; color: var(--secondary-color); }
+    .about-image-wrapper { flex: 1; max-width: 480px; position: relative; }
+    .about-image-wrapper img { border-radius: var(--border-radius-large); box-shadow: var(--shadow); transition: transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth); }
+    .about-image-wrapper:hover img { transform: scale(1.03); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+
+    /* --- Services Section (Altara Features) --- */
+    #services {} /* Uses body bg */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; }
+    .service-card {
+        background-color: var(--card-background); padding: 40px 35px; border-radius: var(--border-radius-large); text-align: center;
+        box-shadow: var(--shadow);
+        transition: transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth), background-color var(--transition-speed-medium) var(--easing-smooth);
+        border-top: 5px solid transparent; position: relative; overflow: hidden;
+    }
+    .service-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(76, 201, 240, 0.15) 0%, transparent 70%); transition: opacity var(--transition-speed-slow) var(--easing-smooth); opacity: 0; z-index: 0; transform: rotate(0deg); }
+    .service-card:hover { transform: translateY(-10px); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35); border-top-color: var(--primary-color); background-color: #2a2f3b; }
+    .service-card:hover::before { opacity: 1; animation: rotateGlow 4s linear infinite; }
+    @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .service-card .icon { font-size: 3.5rem; color: var(--primary-color); margin-bottom: 25px; display: inline-block; transition: transform var(--transition-speed-medium) var(--easing-smooth); line-height: 1; position: relative; z-index: 1; }
+    .service-card:hover .icon { transform: scale(1.15) rotate(-5deg); }
+    .service-card h3 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 600; color: var(--text-color-light); position: relative; z-index: 1; }
+    .service-card p { font-size: 1rem; color: var(--secondary-color); line-height: 1.6; position: relative; z-index: 1; }
+
+    /* --- Objection Handling Section --- */
+    #objection-handling {} /* Uses body bg */
+    .info-card {
+        background-color: rgba(33, 37, 47, 0.9); /* Slightly transparent surface color */
+        backdrop-filter: blur(5px); /* Subtle blur for effect */
+        padding: 40px 45px; border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow); max-width: 900px; margin: 0 auto;
+        border-left: 5px solid var(--primary-color);
+    }
+    .info-card h3 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem; }
+    .info-card p { color: var(--secondary-color); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1rem;}
+     .info-card p:last-of-type { margin-bottom: 0; }
+    .info-card strong { color: var(--text-color-light); font-weight: 600; }
+
+    /* --- Portfolio / Case Studies Section --- */
+    #portfolio {} /* Uses body bg */
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+    .portfolio-item { background-color: var(--card-background); border-radius: var(--border-radius-large); overflow: hidden; box-shadow: var(--shadow); transition: transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth); position: relative; }
+    .portfolio-item:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+    .portfolio-image { position: relative; overflow: hidden; height: 250px; }
+    .portfolio-image img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-speed-slow) var(--easing-smooth); border-top-left-radius: var(--border-radius-large); border-top-right-radius: var(--border-radius-large); }
+    .portfolio-item:hover .portfolio-image img { transform: scale(1.1); }
+    .portfolio-content { padding: 25px 30px; }
+    .portfolio-content h4 { font-size: 1.4rem; margin-bottom: 10px; color: var(--primary-color); font-weight: 600; }
+    .portfolio-content p { font-size: 0.95rem; color: var(--secondary-color); margin-bottom: 20px; line-height: 1.6; }
+    .portfolio-content .tags { margin-bottom: 20px; }
+    .portfolio-content .tag { display: inline-block; background-color: rgba(76, 201, 240, 0.15); color: var(--primary-color); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 8px; margin-bottom: 8px; font-weight: 500; }
+
+    /* --- Testimonials Section --- */
+    #testimonials {} /* Uses body bg */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .testimonial-card { background-color: var(--card-background); padding: 35px; border-radius: var(--border-radius-large); box-shadow: var(--shadow); position: relative; border-left: 5px solid var(--primary-color); transition: transform var(--transition-speed-medium) var(--easing-smooth), box-shadow var(--transition-speed-medium) var(--easing-smooth); }
+    .testimonial-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+    .testimonial-card .quote-icon { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; color: rgba(76, 201, 240, 0.2); opacity: 0.5; }
+    .testimonial-text { font-size: 1.05rem; font-style: italic; color: var(--secondary-color); margin-bottom: 25px; line-height: 1.8; position: relative; z-index: 1; }
+    .testimonial-author { display: flex; align-items: center; }
+    .testimonial-author img { width: 55px; height: 55px; border-radius: 50%; margin-right: 15px; object-fit: cover; border: 2px solid var(--primary-color); }
+    .testimonial-author-info h5 { font-size: 1.1rem; font-weight: 600; color: var(--text-color-light); margin-bottom: 3px; }
+    .testimonial-author-info span { font-size: 0.9rem; color: var(--primary-color); font-weight: 500; }
+
+    /* --- Contact Section (Replaced with Calendly Link) --- */
+    #contact {} /* Uses body bg */
+    /* Styling for the new content */
+    .contact-content-wrapper {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto; /* Center the content */
+    }
+    .contact-content-wrapper p {
+        font-size: 1.15rem;
+        color: var(--secondary-color);
+        margin-bottom: 40px; /* Space before button */
+    }
+    .contact-content-wrapper .btn {
+        padding: 16px 40px; /* Make button larger */
+        font-size: 1.1rem;
+    }
+
+    /* Hide old contact pattern if still present */
+    /* #contact::before { display: none; } */
+    /* No longer need contact form styles */
+
+    /* --- Footer --- */
+    .footer { background-color: var(--background-color); color: var(--text-color-light); padding: 60px 0 30px; text-align: center; border-top: 1px solid #3e4450; position: relative; z-index: 1; } /* Ensure footer is above glow */
+    .footer-content { margin-bottom: 30px; }
+    .footer-logo { margin-bottom: 20px; }
+    .footer-logo-img { max-height: 45px; width: auto; display: inline-block; }
+    .footer-links { margin-bottom: 30px; }
+    .footer-links a { color: var(--secondary-color); text-decoration: none; margin: 0 18px; font-size: 0.95rem; transition: color var(--transition-speed-medium) ease; }
+    .footer-links a:hover { color: var(--primary-color); }
+    .social-links a { color: var(--secondary-color); font-size: 1.6rem; margin: 0 12px; transition: color var(--transition-speed-medium) ease, transform var(--transition-speed-medium) var(--easing-smooth); display: inline-block; }
+    .social-links a:hover { color: var(--primary-color); transform: translateY(-4px); }
+    .footer-bottom { padding-top: 30px; font-size: 0.9rem; color: var(--secondary-color); opacity: 0.8; }
+
+    /* --- Responsive Design --- */
+    @media (max-width: 992px) {
+        .container { max-width: 960px; padding: 0 20px; }
+        .section { padding: 80px 0; }
+         .section.surface-bg { margin: 0 10px; padding: 80px 20px;}
+        .section-title { font-size: 2.4rem; margin-bottom: 50px;}
+        .about-content { flex-direction: column; text-align: center; gap: 40px;}
+        .about-image-wrapper { max-width: 70%; margin: 0 auto; }
+        .testimonials-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+        .section { padding: 70px 0; }
+        .section-title { font-size: 2.1rem; }
+        .services-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .portfolio-grid { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 30px;}
+        .info-card { padding: 30px 35px; }
+
+        /* Mobile Navigation */
+        .nav-menu { position: fixed; left: -100%; top: 0; flex-direction: column; justify-content: center; background-color: var(--surface-color); width: 80%; max-width: 320px; height: 100vh; text-align: center; transition: left var(--transition-speed-medium) var(--easing-smooth); padding-top: 60px; box-shadow: 5px 0px 15px rgba(0,0,0,0.2); z-index: 999; }
+        .nav-menu.active { left: 0; }
+        .nav-item { margin: 25px 0; }
+        .nav-link { font-size: 1.2rem; }
+        .nav-toggler { display: block; z-index: 1001; position: relative; }
+        body.nav-open::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; }
+    }
+
+    @media (max-width: 576px) {
+        .container { padding: 0 15px; }
+        .section { padding: 60px 0; }
+        .section.surface-bg { margin: 0 5px; padding: 60px 15px;}
+        .section-title { font-size: 1.9rem; }
+        .hero .btn { padding: 12px 25px; font-size: 0.9rem; }
+        .portfolio-grid { grid-template-columns: 1fr; }
+        .footer-links a { margin: 0 10px; display: block; margin-bottom: 12px;}
+        .social-links a { margin: 0 8px; }
+        .info-card { padding: 25px 30px; }
+         /* Adjust Calendly button padding on small screens */
+         .contact-content-wrapper .btn { padding: 14px 30px; font-size: 1rem; }
+    }
+</style>
+<!-- ========================================================================= -->
+<!-- ============================= CSS END =================================== -->
+<!-- ========================================================================= -->
+
+</head>
+	
+<body>
+
+<!-- ========================================================================= -->
+<!-- =========================== HTML START ================================== -->
+<!-- ========================================================================= -->
+
+    <!-- =========== HEADER =========== -->
+    <header class="header" id="header">
+        <nav class="navbar container">
+				<!-- Altara Logo -->
+			<a href="#hero" class="nav-logo">
+                <img src="https://cdn.discordapp.com/attachments/1290461382457692210/1361471881261092994/Untitledaaaa-1.png?ex=67fee0ff&is=67fd8f7f&hm=4e4eef495ce8432e7236aec80302046b805829a7126828f9ef746b65078dd46f&" alt="Altara Logo" class="nav-logo-img">
+			</a>
+            <!-- Navigation Menu -->
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="#hero" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#services" class="nav-link">Features</a></li>
+                <li class="nav-item"><a href="#objection-handling" class="nav-link">Why Altara?</a></li>
+                <li class="nav-item"><a href="#portfolio" class="nav-link">Case Studies</a></li>
+                <li class="nav-item"><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Book a Demo</a></li> <!-- Updated link text -->
+            </ul>
+            <!-- Mobile Menu Toggle Button -->
+            <button class="nav-toggler" id="nav-toggler" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- =========== HERO SECTION =========== -->
+		
+        <section class="hero" id="hero">
+            <div class="hero-content container">
+                <h1>Never Miss Another <span>Lead</span>. Instantly Book Jobs, <span>24/7</span>.</h1>
+                <p>Altara uses AI to capture leads from every channel, qualify emergencies, and automatically book appointments – maximizing revenue for your service business.</p>
+                <a href="#services" class="btn">Explore Features</a>
+                <a href="#contact" class="btn btn-secondary">Book Your Free Demo</a> <!-- Link to contact section -->
+            </div>
+        </section>
+
+        <!-- Optional About Us Section -->
+        <!-- <section class="section" id="about"> ... </section> -->
+
+        <!-- =========== SERVICES SECTION (Altara Features) =========== -->
+        <section class="section" id="services"> <!-- Added surface-bg for contrast -->
+            <div class="container">
+                <h2 class="section-title animate-on-scroll fade-in">How Altara Transforms Your Lead Flow</h2>
+                <div class="services-grid">
+                    <!-- Feature Card 1 -->
+                    <div class="service-card animate-on-scroll zoom-in stagger-delay" style="--animation-order: 1;">
+                        <i class="fas fa-network-wired icon"></i>
+                        <h3>Omni‑Channel Lead Capture</h3>
+                        <p>Integrate forms, calls, SMS, Facebook, Google Messages & more. Lightweight scripts funnel every prospect into one unified dashboard, day or night.</p>
+                    </div>
+                    <!-- Feature Card 2 -->
+                    <div class="service-card animate-on-scroll zoom-in stagger-delay" style="--animation-order: 2;">
+                        <i class="fas fa-brain icon"></i>
+                        <h3>Real‑Time AI Triage</h3>
+                        <p>NLP trained on service terms ("burst pipe", "no AC") instantly scores urgency, filters spam, and flags true 24/7 emergencies for immediate action.</p>
+                    </div>
+                    <!-- Feature Card 3 -->
+                    <div class="service-card animate-on-scroll zoom-in stagger-delay" style="--animation-order: 3;">
+                         <i class="fas fa-calendar-check icon"></i>
+                         <h3>Instant Appointment Booking</h3>
+                        <p>Connects directly to Jobber, ServiceTitan, Housecall Pro etc. Qualified leads automatically book the next slot – no phone tag, confirmed jobs in seconds.</p>
+                    </div>
+                    <!-- Feature Card 4 -->
+                    <div class="service-card animate-on-scroll zoom-in stagger-delay" style="--animation-order: 4;">
+                        <i class="fas fa-comment-sms icon"></i>
+                        <h3>SMS & Missed‑Call Automation</h3>
+                        <p>Smart follow-ups re-engage missed calls/forms ("Saw your message about a burst pipe? Book now?"). Recovers 'ghost leads' automatically.</p>
+                    </div>
+                    <!-- Feature Card 5 -->
+                    <div class="service-card animate-on-scroll zoom-in stagger-delay" style="--animation-order: 5;">
+                         <i class="fas fa-chart-line icon"></i>
+                         <h3>Analytics & ROI Dashboard</h3>
+                         <p>Real-time view of leads caught, jobs booked, and revenue saved vs. investment ("15 leads, $12k saved"). Prove ROI easily.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== OBJECTION HANDLING SECTION =========== -->
+        <section class="section" id="objection-handling">
+            <div class="container">
+                <h2 class="section-title animate-on-scroll fade-in">Already Have a Receptionist?</h2>
+                <div class="info-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 1;">
+                    <h3>Think of Altara as Your 24/7 Safety Net</h3>
+                    <p>“Many businesses use receptionists or answering services, but even the best teams miss opportunities—especially after hours or during peak call volume. Altara isn't designed to replace your staff; it acts as a <strong>smart backup layer</strong>.</p>
+                    <p>It integrates directly with your existing scheduling software and activates <strong>only when a lead might otherwise be lost</strong> (unanswered call, delayed form response). It ensures true emergencies are captured and booked <strong>instantly</strong>, without extra work for your team. It's like <strong>‘Lead Insurance’</strong> – ensuring you never miss a high-value job when human hands are tied. Ask us about a 'ghost call' test to see the gaps Altara can fill.”</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== PORTFOLIO / CASE STUDIES SECTION =========== -->
+        <section class="section surface-bg" id="portfolio"> <!-- Added surface-bg for contrast -->
+            <div class="container">
+                <h2 class="section-title animate-on-scroll fade-in">Real Results for Service Businesses</h2>
+                <div class="portfolio-grid">
+                    <!-- Portfolio Item 1 - HVAC Example -->
+                    <div class="portfolio-item animate-on-scroll fade-in-left stagger-delay" style="--animation-order: 1;">
+                        <div class="portfolio-image">
+                            <img src="https://via.placeholder.com/400x250/4361ee/ffffff?text=HVAC+Lead+Boost" alt="HVAC Lead Generation Boost">
+                        </div>
+                        <div class="portfolio-content">
+                            <h4>HVAC Co: +30% After-Hours Leads</h4>
+                            <div class="tags"><span class="tag">HVAC</span><span class="tag">Lead Capture</span><span class="tag">Booking</span></div>
+                            <p>Recovered dozens of missed emergency calls monthly using Altara's omni-channel capture and instant booking features.</p>
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 2 - Plumbing Example -->
+                    <div class="portfolio-item animate-on-scroll fade-in-left stagger-delay" style="--animation-order: 2;">
+                         <div class="portfolio-image">
+                            <img src="https://via.placeholder.com/400x250/4cc9f0/161a21?text=Plumbing+Efficiency" alt="Plumbing Instant Booking">
+                         </div>
+                         <div class="portfolio-content">
+                            <h4>Plumbing Co: 85% Faster Emergency Booking</h4>
+                            <div class="tags"><span class="tag">Plumbing</span><span class="tag">AI Triage</span><span class="tag">Efficiency</span></div>
+                            <p>AI Triage & instant booking via web/SMS dramatically reduced dispatcher workload for urgent requests.</p>
+                         </div>
+                    </div>
+                    <!-- Portfolio Item 3 - Electrical Example -->
+                    <div class="portfolio-item animate-on-scroll fade-in-left stagger-delay" style="--animation-order: 3;">
+                         <div class="portfolio-image">
+                            <img src="https://via.placeholder.com/400x250/86909c/ffffff?text=Electrical+ROI" alt="Electrical Contractor ROI">
+                         </div>
+                         <div class="portfolio-content">
+                            <h4>Electrical Co: Clear ROI Visualization</h4>
+                             <div class="tags"><span class="tag">Electrical</span><span class="tag">Analytics</span><span class="tag">ROI</span></div>
+                            <p>Demonstrated $8,000+ in captured revenue within Q1 using Altara's dashboard, helping optimize marketing spend.</p>
+                         </div>
+                    </div>
+                     <!-- EDIT HERE: Add more case studies as needed -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== TESTIMONIALS SECTION =========== -->
+        <section class="section" id="testimonials">
+            <div class="container">
+                 <h2 class="section-title animate-on-scroll fade-in">Hear From Businesses Like Yours</h2>
+                 <div class="testimonials-grid">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 1;">
+                         <i class="fas fa-quote-right quote-icon"></i>
+                         <p class="testimonial-text">"Altara's system is genius. We were definitely losing leads overnight. Now, I wake up to booked appointments. Game changer for our HVAC business."</p>
+                         <div class="testimonial-author">
+                             <img src="https://via.placeholder.com/80x80/4cc9f0/ffffff?text=S.M." alt=" HVAC Business Owner">
+                             <div class="testimonial-author-info"><h5>Sarah Miller</h5><span>Owner, Comfort Zone Heating & Cooling</span></div>
+                         </div>
+                    </div>
+                     <!-- Testimonial 2 -->
+                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 2;">
+                         <i class="fas fa-quote-right quote-icon"></i>
+                         <p class="testimonial-text">"The automatic follow-up on missed calls alone paid for the service in the first month. Our dispatcher can focus on complex calls now, not just chasing people down."</p>
+                         <div class="testimonial-author">
+                             <img src="https://via.placeholder.com/80x80/4361ee/ffffff?text=D.R." alt="Plumbing Operations Manager">
+                             <div class="testimonial-author-info"><h5>David Rodriguez</h5><span>Operations Manager, Precision Plumbing Pros</span></div>
+                         </div>
+                    </div>
+                     <!-- Testimonial 3 -->
+                    <div class="testimonial-card animate-on-scroll fade-in stagger-delay" style="--animation-order: 3;">
+                         <i class="fas fa-quote-right quote-icon"></i>
+                         <p class="testimonial-text">"Seamless integration with ServiceTitan. The setup was quick, and the ROI dashboard makes it easy to see the value Altara brings every single day."</p>
+                         <div class="testimonial-author">
+                             <img src="https://via.placeholder.com/80x80/86909c/ffffff?text=M.C." alt="Electrical Service Company CEO">
+                             <div class="testimonial-author-info"><h5>Mark Chen</h5><span>CEO, Current Electrical Solutions</span></div>
+                         </div>
+                    </div>
+                     <!-- EDIT HERE: Add more testimonials -->
+                 </div>
+            </div>
+        </section>
+
+        <!-- =========== CONTACT SECTION (Calendly Link) =========== -->
+        <section class="section surface-bg" id="contact"> <!-- Added surface-bg -->
+            <div class="container">
+                <!-- Updated Title -->
+                <h2 class="section-title animate-on-scroll fade-in">Book Your Free Strategy Session</h2>
+                <div class="contact-content-wrapper animate-on-scroll fade-in stagger-delay" style="--animation-order: 1;">
+                    <p>Ready to see how Altara can capture more leads and automate bookings for your specific business? Schedule a personalized demo and consultation call today.</p>
+                    <!-- Direct Calendly Link Button -->
+                    <a href="https://calendly.com/altara-contactus/30min" target="_blank" rel="noopener noreferrer" class="btn">
+                        <i class="fas fa-calendar-alt" style="margin-right: 8px;"></i> Schedule Your Demo Now
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========== FOOTER =========== -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo">
+                 <img src="https://media.discordapp.net/attachments/1290461382457692210/1361461146145525912/altara-high-resolution-logo_1-11.png?ex=67fed6ff&is=67fd857f&hm=ef8d67009fe54769030ab72af91cc1b679fbe13e6243cef356a703a695231899&=&width=1341&height=1006" alt="Altara Logo Footer" class="footer-logo-img">
+            </div>
+             <p style="color: var(--secondary-color); max-width: 500px; margin: -10px auto 30px auto; font-size: 0.95rem;">AI-Powered Lead Capture and Instant Booking for Service Businesses.</p>
+             <div class="footer-links">
+                <a href="#services">Features</a> <a href="#objection-handling">Why Altara?</a> <a href="#portfolio">Case Studies</a> <a href="#contact">Book Demo</a>
+                 <!-- EDIT HERE: Add actual Privacy/Terms links -->
+                <a href="#">Privacy Policy</a> <a href="#">Terms of Service</a>
+             </div>
+             <div class="social-links">
+                 <!-- EDIT HERE: Add actual social links -->
+                <a href="#" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+             </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> Altara. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+<!-- ========================================================================= -->
+<!-- ============================ HTML END =================================== -->
+<!-- ========================================================================= -->
+
+<!-- ========================================================================= -->
+<!-- ======================== JAVASCRIPT START =============================== -->
+<!-- ========================================================================= -->
+<script>
+    /* --- Get Current Year for Footer --- */
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    /* --- Mobile Navigation Toggle --- */
+    const navMenu = document.getElementById('nav-menu');
+    const navToggle = document.getElementById('nav-toggler');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const body = document.body;
+    const header = document.getElementById('header');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            body.classList.toggle('nav-open');
+            const icon = navToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+    }
+    function closeMenu() {
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            body.classList.remove('nav-open');
+            const icon = navToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    }
+    navLinks.forEach(link => link.addEventListener('click', closeMenu));
+    body.addEventListener('click', (event) => {
+         if (body.classList.contains('nav-open') && !navMenu.contains(event.target) && !navToggle.contains(event.target) && !header.contains(event.target) ) {
+             closeMenu();
+         }
+     }, true);
+
+    /* --- Header Style Change on Scroll --- */
+    const scrollThreshold = 50;
+    function debounce(func, wait = 15, immediate = false) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() { timeout = null; if (!immediate) func.apply(context, args); };
+            const callNow = immediate && !timeout; clearTimeout(timeout); timeout = setTimeout(later, wait); if (callNow) func.apply(context, args);
+        };
+    };
+    const handleHeaderScroll = () => {
+        if (window.scrollY > scrollThreshold) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+    };
+    window.addEventListener('scroll', debounce(handleHeaderScroll, 10), { passive: true });
+
+    /* --- Active Link Highlighting on Scroll --- */
+    const sections = document.querySelectorAll('section[id]');
+    const handleScrollActive = () => {
+        const scrollY = window.pageYOffset; const headerHeight = header.offsetHeight || 70; const buffer = headerHeight + 60;
+        let currentSectionId = '';
+        sections.forEach(current => {
+            const sectionHeight = current.offsetHeight; const sectionTop = current.offsetTop - buffer;
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) { currentSectionId = current.getAttribute('id'); }
+        });
+        if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 50) { currentSectionId = sections[sections.length - 1].getAttribute('id'); }
+        if (currentSectionId === '' && scrollY < sections[0].offsetTop - buffer) { currentSectionId = sections[0].getAttribute('id'); }
+        navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href') === `#${currentSectionId}`) { link.classList.add('active'); } });
+    };
+    window.addEventListener('scroll', debounce(handleScrollActive, 50), { passive: true });
+    handleScrollActive(); // Initial check
+
+    /* --- Animation on Scroll using Intersection Observer --- */
+    const scrollElements = document.querySelectorAll('.animate-on-scroll');
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const observerCallback = (entries, observer) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); } else { /* Keep visible on scroll up or add remove logic */ } }); };
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    scrollElements.forEach(el => { observer.observe(el); });
+
+     /* --- Removed Contact Form JS --- */
+
+</script>
+<!-- ========================================================================= -->
+<!-- ========================= JAVASCRIPT END ================================ -->
+<!-- ========================================================================= -->
+
+</body>
+</html>
